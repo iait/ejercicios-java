@@ -67,9 +67,9 @@ public class ConversorTest {
     public void testConversor() throws Exception {
 
         Tasa tasaOrigen = new Tasa(TipoTasaEnum.EFECTIVA, BigDecimal.ZERO, 1L);
-        Tasa tasa = conversor.convertir(tasaOrigen, 1L, TipoTasaEnum.NOMINAL_VENCIDA, 1L);
+        Tasa tasa = conversor.convertir(tasaOrigen, 1L, TipoTasaEnum.NOMINAL, 1L);
         assertEquals(Long.valueOf(1L), tasa.getModulo());
-        assertEquals(TipoTasaEnum.NOMINAL_VENCIDA, tasa.getTipo());
+        assertEquals(TipoTasaEnum.NOMINAL, tasa.getTipo());
         assertThat(tasa.getValor().compareTo(BigDecimal.ONE), is(0));
     }
 

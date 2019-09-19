@@ -80,8 +80,7 @@ public class App implements CommandLineRunner {
 
     private TipoTasaEnum leerTipoTasa(Scanner scanner) {
         System.out.println("1) Efectiva");
-        System.out.println("2) Nominal Adelantada");
-        System.out.println("3) Nominal Vencida");
+        System.out.println("2) Nominal");
         TipoTasaEnum tipoTasa = TipoTasaEnum.of(scanner.nextInt());
         return tipoTasa;
     }

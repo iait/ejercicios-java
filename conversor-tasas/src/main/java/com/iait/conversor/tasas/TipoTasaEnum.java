@@ -8,8 +8,7 @@ import org.springframework.util.Assert;
 public enum TipoTasaEnum {
 
     EFECTIVA(1),
-    NOMINAL_ADELANTADA(2),
-    NOMINAL_VENCIDA(3),
+    NOMINAL(2),
     ;
 
     private Integer id;
