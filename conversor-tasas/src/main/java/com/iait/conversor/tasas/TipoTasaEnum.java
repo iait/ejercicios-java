@@ -3,6 +3,8 @@ package com.iait.conversor.tasas;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.util.Assert;
+
 public enum TipoTasaEnum {
 
     EFECTIVA(1),
@@ -29,6 +31,8 @@ public enum TipoTasaEnum {
         if (id == null) {
             return null;
         }
-        return map.get(id);
+        TipoTasaEnum tipo = map.get(id);
+        Assert.notNull(tipo, String.format("Tipo de tasa incorrecto: %s", id));
+        return tipo;
     }
 }
