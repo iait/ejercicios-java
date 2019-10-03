@@ -10,13 +10,14 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class JdbcTemplate {
     
+    @Autowired
     private DataSource ds;
-    
-    public JdbcTemplate(DataSource ds) {
-        this.ds = ds;
-    }
     
     public <T> List<T> query(String sql, RowMapper<T> rowMapper) {
         List<T> result = new ArrayList<>();

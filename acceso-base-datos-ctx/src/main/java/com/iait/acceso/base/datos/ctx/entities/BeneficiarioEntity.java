@@ -1,4 +1,4 @@
-package com.iait.acceso.base.datos.ctx;
+package com.iait.acceso.base.datos.ctx.entities;
 
 public class BeneficiarioEntity {
     
