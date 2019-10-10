@@ -8,24 +8,34 @@ import java.sql.Statement;
 
 import javax.sql.DataSource;
 
-import org.h2.jdbcx.JdbcDataSource;
-import org.h2.tools.Server;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+@Configuration
 public class App {
+    
+    public static final ApplicationContext CTX;
+    
+    static {
+        CTX = new ClassPathXmlApplicationContext("app-config.xml");
+    }
     
     private static final String SQL = "select * from provincias;";
     private static final String SQL_INSERT = "insert into provincias (id, nombre) values (?, ?)";
     
     public static void main(String[] args) throws SQLException {
-        App app = new App();
+        App app = CTX.getBean(App.class);
         app.run();
     }
     
+    @Autowired
+    private DataSource ds;
+    
     public void run() throws SQLException {
         
-        Server.main();
-        
-        try (Connection conn = getDataSource().getConnection();
+        try (Connection conn = ds.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(SQL_INSERT);) {
             
             conn.setAutoCommit(false);
@@ -62,7 +72,7 @@ public class App {
     
     public void buscaProvincias() {
         
-        try (Connection conn = getDataSource().getConnection();
+        try (Connection conn = ds.getConnection();
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(SQL)) {
             
@@ -73,13 +83,5 @@ public class App {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-    
-    private DataSource getDataSource() {
-        
-        JdbcDataSource ds = new JdbcDataSource();
-        ds.setUrl("jdbc:h2:mem:testdb;INIT=runscript from 'src/main/resources/import.sql'");
-        ds.setUser("sa");
-        return ds;
     }
 }
