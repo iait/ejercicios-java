@@ -1,11 +1,12 @@
 package com.iait.ejercicio.entities;
 
-public class ProvinciaEntity extends AbstractEntity {
+public class LocalidadEntity extends AbstractEntity {
     
     private Long id;
     private String nombre;
+    private ProvinciaEntity provincia;
     
-    public ProvinciaEntity() {}
+    public LocalidadEntity() {}
     
     public Long getId() {
         return id;
@@ -23,6 +24,14 @@ public class ProvinciaEntity extends AbstractEntity {
         this.nombre = nombre;
     }
     
+    public ProvinciaEntity getProvincia() {
+        return provincia;
+    }
+    
+    public void setProvincia(ProvinciaEntity provincia) {
+        this.provincia = provincia;
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -36,10 +45,10 @@ public class ProvinciaEntity extends AbstractEntity {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof ProvinciaEntity)) {
+        if (!(obj instanceof LocalidadEntity)) {
             return false;
         }
-        ProvinciaEntity other = (ProvinciaEntity) obj;
+        LocalidadEntity other = (LocalidadEntity) obj;
         if (id == null) {
             if (other.id != null) {
                 return false;
@@ -49,9 +58,10 @@ public class ProvinciaEntity extends AbstractEntity {
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
-        return "ProvinciaEntity [id=" + id + ", nombre=" + nombre + "]";
+        return "LocalidadEntity [id=" + id + ", nombre=" + nombre + ", provincia=" 
+                + provincia.getNombre() + "]";
     }
 }

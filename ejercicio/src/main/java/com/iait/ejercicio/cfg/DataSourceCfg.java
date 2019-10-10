@@ -6,6 +6,10 @@ import org.h2.jdbcx.JdbcDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 @Configuration
 public class DataSourceCfg {
@@ -19,14 +23,23 @@ public class DataSourceCfg {
     @Value("${app.pwd}")
     private String pwd;
     
-    @Value("${app.driver}")
-    private String driver;
+    @Value("classpath:import.sql")
+    private Resource importScript;
     
     @Bean
-    DataSource getDataSource() {
+    public DataSource getDataSource() {
         JdbcDataSource ds = new JdbcDataSource();
-        ds.setUrl("jdbc:h2:mem:testdb;INIT=runscript from 'src/main/resources/import.sql'");
-        ds.setUser("sa");
+        ds.setUrl(url);
+        ds.setUser(user);
+        ds.setPassword(pwd);
+        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+        populator.addScript(importScript);
+        DatabasePopulatorUtils.execute(populator, ds);
         return ds;
+    }
+    
+    @Bean
+    public JdbcTemplate getJdbcTemplate(DataSource ds) {
+        return new JdbcTemplate(ds);
     }
 }

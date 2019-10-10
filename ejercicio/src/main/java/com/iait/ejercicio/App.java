@@ -1,17 +1,20 @@
 package com.iait.ejercicio;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.Optional;
+import java.util.Scanner;
 
-import javax.sql.DataSource;
-
+import org.h2.tools.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.iait.ejercicio.entities.AbstractEntity;
+import com.iait.ejercicio.entities.LocalidadEntity;
+import com.iait.ejercicio.entities.ProvinciaEntity;
+import com.iait.ejercicio.repositories.LocalidadRepository;
+import com.iait.ejercicio.repositories.ProvinciaRepository;
 
 @Configuration
 public class App {
@@ -22,66 +25,88 @@ public class App {
         CTX = new ClassPathXmlApplicationContext("app-config.xml");
     }
     
-    private static final String SQL = "select * from provincias;";
-    private static final String SQL_INSERT = "insert into provincias (id, nombre) values (?, ?)";
-    
     public static void main(String[] args) throws SQLException {
         App app = CTX.getBean(App.class);
         app.run();
     }
     
     @Autowired
-    private DataSource ds;
+    private ProvinciaRepository provinciaRepository;
+    
+    @Autowired
+    private LocalidadRepository localidadRepository;
+    
+    @Autowired
+    private Scanner scanner;
     
     public void run() throws SQLException {
         
-        try (Connection conn = ds.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(SQL_INSERT);) {
-            
-            conn.setAutoCommit(false);
-            
-            for (int i = 10; i < 13; i++) {
-                
-                stmt.setInt(1, i);
-                stmt.setString(2, "Provincia " + i);
-                
-                stmt.execute();
-            }
-            
-            System.out.println("listo paso 1");
-            
-            stmt.setInt(1, 12);
-            stmt.setString(2, "Provincia");
-            
-            try {
-                stmt.execute();
-            } catch (Exception e) {
-                conn.rollback();
-            }
-            
-            conn.commit();
-            
-            System.out.println("listo paso 2");
-            
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Server.main();
         
-        buscaProvincias();
+        cargaDatos();
+        
+        muestraDatos();
+        
+        buscar();
     }
     
-    public void buscaProvincias() {
+    private void cargaDatos() {
         
-        try (Connection conn = ds.getConnection();
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(SQL)) {
-            
-            while (rs.next()) {
-                System.out.println("Provincia: " + rs.getString("nombre"));
-            }
-            
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        ProvinciaEntity provincia = new ProvinciaEntity();
+        provincia.setId(4L);
+        provincia.setNombre("Rio Negro");
+        provinciaRepository.save(provincia);
+        
+        LocalidadEntity localidad = new LocalidadEntity();
+        localidad.setId(5L);
+        localidad.setNombre("San Carlos de Bariloche");
+        localidad.setProvincia(provincia);
+        localidadRepository.save(localidad);
     }
+    
+    private void muestraDatos() {
+        
+        System.out.println();
+        System.out.println("Provincias:");
+        provinciaRepository.findAll().forEach(System.out::println);
+        
+        System.out.println();
+        System.out.println("Localidades:");
+        localidadRepository.findAll().forEach(System.out::println);
+    }
+    
+    private void buscar() {
+        
+        System.out.println();
+        System.out.println("Ingrese entidad a buscar:");
+        System.out.println("1 - Provincia, 2 - Localidad, 3 - Salir");
+        int opcion = scanner.nextInt();
+        if (opcion == 3) {
+            return;
+        }
+        
+        System.out.println();
+        System.out.println("Ingrese id de entidad: ");
+        long id = scanner.nextLong();
+        
+        Optional<? extends AbstractEntity> optEntity;
+        if (opcion == 1) {
+            optEntity = provinciaRepository.findById(id);
+        } else if (opcion == 2) {
+            optEntity = localidadRepository.findById(id);
+        } else {
+            System.out.println("Opción desconocida");
+            buscar();
+            return;
+        }
+        if (optEntity.isPresent()) {
+            System.out.println();
+            System.out.println(String.format("Entidad encontrada: %s", optEntity.get()));
+        } else {
+            System.out.println();
+            System.out.println("Entidad no encontrada");
+        }
+        buscar();
+    }
+    
 }
