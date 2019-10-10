@@ -1,14 +1,16 @@
 package com.iait.ejercicio.repositories;
 
-import java.sql.Types;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.SqlParameterValue;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.iait.ejercicio.entities.ProvinciaEntity;
@@ -16,12 +18,15 @@ import com.iait.ejercicio.entities.ProvinciaEntity;
 @Repository
 public class ProvinciaRepository implements CrudRepository<ProvinciaEntity, Long> {
     
-    private static final String SQL_FIND_BY_ID = "select * from provincias where id = ?;";
-    private static final String SQL_FIND_ALL = "select * from provincias;";
-    private static final String SQL_INSERT = "insert into provincias values (?, ?);";
+    private static final String SQL_FIND_BY_ID = 
+            "select * from provincias where id = :id;";
+    private static final String SQL_FIND_ALL = 
+            "select * from provincias;";
+    private static final String SQL_INSERT = 
+            "insert into provincias values (:id, :nombre);";
     
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate jdbcTemplate;
     
     private final RowMapper<ProvinciaEntity> rowMapper = (rs, rowNum) -> {
         ProvinciaEntity entity = new ProvinciaEntity();
@@ -33,11 +38,12 @@ public class ProvinciaRepository implements CrudRepository<ProvinciaEntity, Long
     @Override
     public Optional<ProvinciaEntity> findById(Long id) {
         
-        SqlParameterValue paramId = new SqlParameterValue(Types.BIGINT, id);
+        SqlParameterSource paramSource = new MapSqlParameterSource().addValue("id", id);
         
         Optional<ProvinciaEntity> result;
         try {
-            ProvinciaEntity prov = jdbcTemplate.queryForObject(SQL_FIND_BY_ID, rowMapper, paramId);
+            ProvinciaEntity prov = jdbcTemplate.queryForObject(
+                    SQL_FIND_BY_ID, paramSource, rowMapper);
             result = Optional.of(prov);
         } catch (EmptyResultDataAccessException e) {
             result = Optional.empty();
@@ -55,6 +61,9 @@ public class ProvinciaRepository implements CrudRepository<ProvinciaEntity, Long
     @Override
     public void save(ProvinciaEntity entity) {
         
-        jdbcTemplate.update(SQL_INSERT, entity.getId(), entity.getNombre());
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("id", entity.getId());
+        paramMap.put("nombre", entity.getNombre());
+        jdbcTemplate.update(SQL_INSERT, paramMap);
     }
 }
