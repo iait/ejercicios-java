@@ -2,18 +2,24 @@ package com.iait.concurrency.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 
 @Entity
 @Table(name = "test")
 public class TestEntity {
     
-    @Id @Column
+    @Id
+    @TableGenerator(name = "table_generator", table = "id_gen", pkColumnName = "gen_name", 
+        valueColumnName = "gen_val")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "table_generator") 
     private Long id;
     
-    @Column(name = "no_id")
-    private Long noId;
+    @Column(name = "value")
+    private Long value;
     
     public TestEntity() {}
     
@@ -25,19 +31,19 @@ public class TestEntity {
         this.id = id;
     }
     
-    public Long getNoId() {
-        return noId;
+    public Long getValue() {
+        return value;
     }
     
-    public void setNoId(Long noId) {
-        this.noId = noId;
+    public void setValue(Long value) {
+        this.value = value;
     }
     
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         return result;
     }
     
@@ -50,11 +56,11 @@ public class TestEntity {
             return false;
         }
         TestEntity other = (TestEntity) obj;
-        if (id == null) {
-            if (other.id != null) {
+        if (getId() == null) {
+            if (other.getId() != null) {
                 return false;
             }
-        } else if (!id.equals(other.id)) {
+        } else if (!getId().equals(other.getId())) {
             return false;
         }
         return true;
@@ -62,6 +68,6 @@ public class TestEntity {
     
     @Override
     public String toString() {
-        return "TestEntity [id=" + id + ", noId=" + noId + "]";
+        return "TestEntity [id=" + id + ", value=" + value + "]";
     }
 }
