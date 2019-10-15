@@ -12,47 +12,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.iait.concurrency.entities.TestEntity;
-import com.iait.concurrency.repositories.TestRepository;
+import com.iait.concurrency.entities.PersonaEntity;
+import com.iait.concurrency.repositories.PersonaRepository;
 
 @Service
-public class TestService {
+public class PersonaService {
     
-    private static final Logger LOG = LoggerFactory.getLogger(TestService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PersonaService.class);
     
     @Autowired
-    private TestRepository repository;
+    private PersonaRepository repository;
     
     @PersistenceContext
     private EntityManager em;
     
     @Transactional(readOnly = true)
-    public Optional<TestEntity> buscarPorId(Long id) {
+    public Optional<PersonaEntity> buscarPorId(Long id) {
         return repository.findById(id);
     }
     
     @Transactional(readOnly = true)
-    public List<TestEntity> buscar() {
+    public List<PersonaEntity> buscar() {
         return repository.findAll();
     }
     
     @Transactional
-    public TestEntity alta(Long value) {
+    public PersonaEntity alta(String value) {
         
         LOG.info("Guardando valor: {}", value);
         
-        TestEntity entity = new TestEntity();
+        PersonaEntity entity = new PersonaEntity();
         entity.setValue(value);
         
-//        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
-//        QTestEntity q = QTestEntity.testEntity;
-//        
-//        Long id = queryFactory.from(q).select(q.id.max()).fetchFirst();
-//        if (id == null) {
-//            id = 0L;
-//        }
-//        id++;
-//        entity.setId(id);
         return repository.save(entity);
     }
 }

@@ -39,8 +39,8 @@ public class TestCtrl {
     }
     
     @PostMapping
-    public ResponseEntity<TestResponse> alta(@RequestBody Long noId) throws InterruptedException {
-        TestEntity entity = service.alta(noId);
+    public ResponseEntity<TestResponse> alta(@RequestBody Long value) {
+        TestEntity entity = service.alta(value);
         TestResponse response = new TestResponse(entity);
         return ResponseEntity.ok(response);
     }

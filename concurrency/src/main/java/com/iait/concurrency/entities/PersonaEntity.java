@@ -8,20 +8,20 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "test")
-public class TestEntity {
+@Table(name = "personas")
+public class PersonaEntity {
     
     @Id
-//    @TableGenerator(name = "table_generator", table = "id_gen", pkColumnName = "gen_name", 
-//        valueColumnName = "gen_val")
-//    @GeneratedValue(strategy = GenerationType.TABLE, generator = "table_generator")
+//    @TableGenerator(name = "table_generator", table = "id_gen", pkColumnName = "gen_name",
+//            valueColumnName = "gen_val")
+//  @GeneratedValue(strategy = GenerationType.TABLE, generator = "table_generator")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     
     @Column(name = "value")
-    private Long value;
+    private String value;
     
-    public TestEntity() {}
+    public PersonaEntity() {}
     
     public Long getId() {
         return id;
@@ -31,14 +31,14 @@ public class TestEntity {
         this.id = id;
     }
     
-    public Long getValue() {
+    public String getValue() {
         return value;
     }
     
-    public void setValue(Long value) {
+    public void setValue(String value) {
         this.value = value;
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -46,16 +46,16 @@ public class TestEntity {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         return result;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof TestEntity)) {
+        if (!(obj instanceof PersonaEntity)) {
             return false;
         }
-        TestEntity other = (TestEntity) obj;
+        PersonaEntity other = (PersonaEntity) obj;
         if (getId() == null) {
             if (other.getId() != null) {
                 return false;
@@ -65,9 +65,9 @@ public class TestEntity {
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
-        return "TestEntity [id=" + id + ", value=" + value + "]";
+        return "PersonaEntity [id=" + id + ", value=" + value + "]";
     }
 }
