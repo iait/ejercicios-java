@@ -12,37 +12,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.iait.concurrency.entities.PersonaEntity;
-import com.iait.concurrency.repositories.PersonaRepository;
+import com.iait.concurrency.entities.ProvinciaEntity;
+import com.iait.concurrency.repositories.ProvinciaRepository;
 
 @Service
-public class PersonaService {
+public class ProvinciaService {
     
-    private static final Logger LOG = LoggerFactory.getLogger(PersonaService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProvinciaService.class);
     
     @Autowired
-    private PersonaRepository repository;
+    private ProvinciaRepository repository;
     
     @PersistenceContext
     private EntityManager em;
     
     @Transactional(readOnly = true)
-    public Optional<PersonaEntity> buscarPorId(Long id) {
+    public Optional<ProvinciaEntity> buscarPorId(Long id) {
         return repository.findById(id);
     }
     
     @Transactional(readOnly = true)
-    public List<PersonaEntity> buscar() {
+    public List<ProvinciaEntity> buscar() {
         return repository.findAll();
     }
     
     @Transactional
-    public PersonaEntity alta(String value) {
+    public ProvinciaEntity alta(String nombre) {
         
-        LOG.info("Guardando valor: {}", value);
+        LOG.info("Guardando provincia {}", nombre);
         
-        PersonaEntity entity = new PersonaEntity();
-        entity.setValue(value);
+        ProvinciaEntity entity = new ProvinciaEntity();
+        entity.setNombre(nombre);
         
         return repository.save(entity);
     }

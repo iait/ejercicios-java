@@ -3,26 +3,25 @@ package com.iait.concurrency.entities;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "test")
-public class TestEntity {
+@Table(name = "provincias")
+public class ProvinciaEntity {
     
     @Id @Column(name = "id")
-    @GenericGenerator(name = "test_generator", 
-        strategy = "com.iait.concurrency.generators.CustomGenerator")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "test_generator")
+    @GenericGenerator(name = "provincias_generator", 
+            strategy = "com.iait.concurrency.generators.CustomGenerator")
+    @GeneratedValue(generator = "provincias_generator")
     private Long id;
     
-    @Column(name = "value")
-    private Long value;
+    @Column(name = "nombre", nullable = false)
+    private String nombre;
     
-    public TestEntity() {}
+    public ProvinciaEntity() {}
     
     public Long getId() {
         return id;
@@ -32,12 +31,12 @@ public class TestEntity {
         this.id = id;
     }
     
-    public Long getValue() {
-        return value;
+    public String getNombre() {
+        return nombre;
     }
     
-    public void setValue(Long value) {
-        this.value = value;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
     
     @Override
@@ -53,10 +52,10 @@ public class TestEntity {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof TestEntity)) {
+        if (!(obj instanceof ProvinciaEntity)) {
             return false;
         }
-        TestEntity other = (TestEntity) obj;
+        ProvinciaEntity other = (ProvinciaEntity) obj;
         if (getId() == null) {
             if (other.getId() != null) {
                 return false;
@@ -69,6 +68,6 @@ public class TestEntity {
     
     @Override
     public String toString() {
-        return "TestEntity [id=" + id + ", value=" + value + "]";
+        return "TestEntity [id=" + id + ", nombre=" + nombre + "]";
     }
 }
