@@ -44,15 +44,6 @@ public class TestService {
         TestEntity entity = new TestEntity();
         entity.setValue(value);
         
-//        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
-//        QTestEntity q = QTestEntity.testEntity;
-//        
-//        Long id = queryFactory.from(q).select(q.id.max()).fetchFirst();
-//        if (id == null) {
-//            id = 0L;
-//        }
-//        id++;
-//        entity.setId(id);
         return repository.save(entity);
     }
 }

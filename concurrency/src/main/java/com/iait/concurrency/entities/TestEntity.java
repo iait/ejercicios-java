@@ -11,10 +11,7 @@ import javax.persistence.Table;
 @Table(name = "test")
 public class TestEntity {
     
-    @Id
-//    @TableGenerator(name = "table_generator", table = "id_gen", pkColumnName = "gen_name", 
-//        valueColumnName = "gen_val")
-//    @GeneratedValue(strategy = GenerationType.TABLE, generator = "table_generator")
+    @Id @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     
