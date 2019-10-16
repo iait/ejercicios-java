@@ -15,7 +15,7 @@ public class PersonaEntity {
 //    @TableGenerator(name = "table_generator", table = "id_gen", pkColumnName = "gen_name",
 //            valueColumnName = "gen_val")
 //  @GeneratedValue(strategy = GenerationType.TABLE, generator = "table_generator")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     
     @Column(name = "value")

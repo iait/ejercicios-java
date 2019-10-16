@@ -7,12 +7,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity
 @Table(name = "test")
 public class TestEntity {
     
     @Id @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GenericGenerator(name = "test_generator", 
+        strategy = "com.iait.concurrency.generators.CustomGenerator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "test_generator")
     private Long id;
     
     @Column(name = "value")

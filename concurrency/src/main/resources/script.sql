@@ -7,7 +7,7 @@ CREATE TABLE personas (
     value varchar(200) NOT NULL
 );
 CREATE TABLE id_gen (
-    gen_name varchar(80) PRIMARY KEY,
-    gen_val bigint
+    gen_key varchar(100) PRIMARY KEY,
+    gen_value bigint
 );
-CREATE SEQUENCE hibernate_sequence START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE test_sequence START WITH 20 INCREMENT BY 80;
