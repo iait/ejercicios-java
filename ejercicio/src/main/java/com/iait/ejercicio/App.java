@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Scanner;
 
+import org.h2.tools.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -39,6 +40,8 @@ public class App {
     private Scanner scanner;
     
     public void run() throws SQLException {
+        
+        Server.main();
         
         cargaDatos();
         

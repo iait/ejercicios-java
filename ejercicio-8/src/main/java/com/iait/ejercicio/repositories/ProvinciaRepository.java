@@ -23,6 +23,7 @@ public class ProvinciaRepository implements CrudRepository<ProvinciaEntity, Long
     private static final String SQL_MAX_ID = "SELECT MAX(id) FROM provincias";
     private static final String SQL_INSERT = "INSERT INTO provincias (id, nombre) VALUES (?, ?)";
     private static final String SQL_UPDATE = "UPDATE provincias SET nombre = ? WHERE id = ?";
+    private static final String SQL_DELETE = "DELETE FROM provincias WHERE id = ?";
     
     private final RowMapper<ProvinciaEntity> rowMapper = (rs, row) -> {
         long id = rs.getLong("id");
@@ -42,7 +43,7 @@ public class ProvinciaRepository implements CrudRepository<ProvinciaEntity, Long
         
         Long maxId = jdbcTemplate.queryForObject(SQL_MAX_ID, Long.class);
         
-        if(maxId == null) {
+        if (maxId == null) {
             return Optional.empty();
         } else {
             return Optional.of(maxId);
@@ -92,5 +93,15 @@ public class ProvinciaRepository implements CrudRepository<ProvinciaEntity, Long
             
             jdbcTemplate.update(SQL_INSERT, provinciaEntity.getId(), provinciaEntity.getNombre());
         }
+    }
+    
+    @Override
+    public Optional<ProvinciaEntity> deleteById(Long id) {
+        
+        Optional<ProvinciaEntity> optional = findById(id);
+        if (optional.isPresent()) {
+            jdbcTemplate.update(SQL_DELETE, id);
+        }
+        return optional;
     }
 }

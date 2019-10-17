@@ -1,13 +1,13 @@
 package com.iait.ejercicio.dtos;
 
-public class LocalidadNuevoFrm {
+public class LocalidadFrm implements LocalidadDto {
 
     private String nombre;
     private Long provinciaId;
     
-    public LocalidadNuevoFrm() {
-    }
+    public LocalidadFrm() {}
 
+    @Override
     public String getNombre() {
         return nombre;
     }
@@ -16,6 +16,7 @@ public class LocalidadNuevoFrm {
         this.nombre = nombre;
     }
 
+    @Override
     public Long getProvinciaId() {
         return provinciaId;
     }

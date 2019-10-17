@@ -12,4 +12,6 @@ public interface CrudRepository<T, I> {
     List<T> findAll();
     
     void save(T entity);
+    
+    Optional<T> deleteById(I id);
 }

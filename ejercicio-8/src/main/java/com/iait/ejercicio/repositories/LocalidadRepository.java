@@ -25,6 +25,11 @@ public class LocalidadRepository implements CrudRepository<LocalidadEntity, Long
             "SELECT l.id, l.nombre, p.id as p_id, p.nombre as p_nombre FROM localidades l "
             + "INNER JOIN provincias p ON l.provincia_id = p.id WHERE l.id = :id";
     
+    private static final String SQL_FIND_BY_PROVINCIA_ID = 
+            "SELECT l.id, l.nombre, p.id as p_id, p.nombre as p_nombre FROM localidades l "
+            + "INNER JOIN provincias p ON l.provincia_id = p.id "
+            + "WHERE l.provincia_id = :provincia_id";
+    
     private static final String SQL_FIND_ALL = 
             "SELECT l.id, l.nombre, p.id as p_id, p.nombre as p_nombre FROM localidades l "
             + "INNER JOIN provincias p ON l.provincia_id = p.id";
@@ -37,6 +42,9 @@ public class LocalidadRepository implements CrudRepository<LocalidadEntity, Long
     private static final String SQL_UPDATE = "UPDATE localidades "
             + "SET nombre = :nombre, provincia_id = :provincia_id "
             + "WHERE id = :id";
+    
+    private static final String SQL_DELETE = "DELETE FROM localidades WHERE id = :id";
+            
     
     private final RowMapper<LocalidadEntity> rowMapper = (rs, row) -> {
         
@@ -82,6 +90,15 @@ public class LocalidadRepository implements CrudRepository<LocalidadEntity, Long
             return Optional.empty();
         }
     }
+    
+    public List<LocalidadEntity> findByProvinciaId(Long provinciaId) {
+        
+        NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        SqlParameterSource params = new MapSqlParameterSource()
+                .addValue("provincia_id", provinciaId);
+        
+        return jdbcTemplate.query(SQL_FIND_BY_PROVINCIA_ID, params, rowMapper);
+    }
 
     @Override
     public Optional<Long> maxId() {
@@ -89,7 +106,7 @@ public class LocalidadRepository implements CrudRepository<LocalidadEntity, Long
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         Long maxId = jdbcTemplate.queryForObject(SQL_MAX_ID, Long.class);
         
-        if(maxId == null) {
+        if (maxId == null) {
             return Optional.empty();
         } else {
             return Optional.of(maxId);
@@ -152,5 +169,17 @@ public class LocalidadRepository implements CrudRepository<LocalidadEntity, Long
             
             jdbcTemplate.update(SQL_INSERT, params);
         }
+    }
+    
+    @Override
+    public Optional<LocalidadEntity> deleteById(Long id) {
+        
+        Optional<LocalidadEntity> optional = findById(id);
+        if (optional.isPresent()) {
+            SqlParameterSource params = new MapSqlParameterSource().addValue("id", id);
+            NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+            jdbcTemplate.update(SQL_DELETE, params);
+        }
+        return optional;
     }
 }
