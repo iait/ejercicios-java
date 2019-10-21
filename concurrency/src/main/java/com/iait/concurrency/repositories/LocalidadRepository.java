@@ -7,5 +7,5 @@ import com.iait.concurrency.entities.LocalidadEntity;
 
 public interface LocalidadRepository extends 
         JpaRepository<LocalidadEntity, Long>, QuerydslPredicateExecutor<LocalidadEntity> {
-
+    
 }

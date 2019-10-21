@@ -7,5 +7,5 @@ import com.iait.concurrency.entities.ProvinciaEntity;
 
 public interface ProvinciaRepository extends 
         JpaRepository<ProvinciaEntity, Long>, QuerydslPredicateExecutor<ProvinciaEntity> {
-
+    
 }

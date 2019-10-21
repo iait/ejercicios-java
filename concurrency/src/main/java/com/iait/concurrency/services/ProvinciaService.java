@@ -23,6 +23,9 @@ public class ProvinciaService {
     @Autowired
     private ProvinciaRepository repository;
     
+    @Autowired
+    private LocalidadService localidadService;
+    
     @PersistenceContext
     private EntityManager em;
     
@@ -45,5 +48,23 @@ public class ProvinciaService {
         entity.setNombre(nombre);
         
         return repository.save(entity);
+    }
+    
+    @Transactional
+    public Optional<ProvinciaEntity> borrar(Long id) {
+        
+        LOG.info("Eliminando provincia {}", id);
+        
+        Optional<ProvinciaEntity> provincia = buscarPorId(id);
+        if (provincia.isPresent()) {
+            if (!localidadService.buscarPorProvinciaId(id).isEmpty()) {
+                throw new RuntimeException(
+                        "No se puede eliminar la provincia porque existen localidades que la "
+                        + "referencian");
+            }
+            repository.delete(provincia.get());
+        }
+        
+        return provincia;
     }
 }

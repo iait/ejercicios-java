@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.iait.concurrency.entities.LocalidadEntity;
 import com.iait.concurrency.entities.ProvinciaEntity;
+import com.iait.concurrency.entities.QLocalidadEntity;
 import com.iait.concurrency.repositories.LocalidadRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Service
 public class LocalidadService {
@@ -36,6 +38,13 @@ public class LocalidadService {
     }
     
     @Transactional(readOnly = true)
+    public List<LocalidadEntity> buscarPorProvinciaId(Long provinciaId) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+        QLocalidadEntity q = QLocalidadEntity.localidadEntity;
+        return queryFactory.selectFrom(q).where(q.provincia.id.eq(provinciaId)).fetch();
+    }
+    
+    @Transactional(readOnly = true)
     public List<LocalidadEntity> buscar() {
         return repository.findAll();
     }
@@ -52,5 +61,18 @@ public class LocalidadService {
         entity.setProvincia(provincia);
         
         return repository.save(entity);
+    }
+    
+    @Transactional
+    public Optional<LocalidadEntity> eliminar(Long id) {
+        
+        LOG.info("Eliminando localidad {}", id);
+        
+        Optional<LocalidadEntity> localidad = buscarPorId(id);
+        if (localidad.isPresent()) {
+            repository.delete(localidad.get());
+        }
+        
+        return localidad;
     }
 }
