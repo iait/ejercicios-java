@@ -18,6 +18,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <version.swagger>2.9.2</version.swagger>
+        <liquibase.properties>liquibase-generate.properties</liquibase.properties>
     </properties>
     
     <dependencies>
@@ -34,6 +35,23 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+        
+        <!-- Liquibase -->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-maven-plugin</artifactId>
+            <version>3.8.0</version>
+            <type>maven-plugin</type>
+        </dependency>
+<!--         <dependency> -->
+<!--             <groupId>org.liquibase.ext</groupId> -->
+<!--             <artifactId>liquibase-hibernate4</artifactId> -->
+<!--             <version>${liquibase-hibernate.version}</version> -->
+<!--         </dependency> -->
+<!--         <dependency> -->
+<!--             <groupId>org.liquibase</groupId> -->
+<!--             <artifactId>liquibase-core</artifactId> -->
+<!--         </dependency> -->
         
         <!-- JDBC -->
         <dependency>
@@ -87,11 +105,51 @@
         </dependency>
     </dependencies>
     
+    <profiles>
+        <profile>
+            <id>generate</id>
+            <properties>
+                <liquibase.properties>liquibase-generate.properties</liquibase.properties>
+            </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>diff</id>
+            <properties>
+                <liquibase.properties>liquibase-diff.properties</liquibase.properties>
+            </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>update</id>
+            <properties>
+                <liquibase.properties>liquibase-update.properties</liquibase.properties>
+            </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+    
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin> 
+            
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <propertyFile>src/main/resources/${liquibase.properties}</propertyFile>
+                    <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+                </configuration>
             </plugin>
             
             <plugin>

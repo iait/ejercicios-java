@@ -21,6 +21,9 @@ public class ProvinciaEntity {
     @Column(name = "nombre", nullable = false)
     private String nombre;
     
+    @Column(name = "nombre_abreviado", nullable = false)
+    private String nombreAbreviado;
+    
     public ProvinciaEntity() {}
     
     public Long getId() {
@@ -37,6 +40,14 @@ public class ProvinciaEntity {
     
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+    
+    public String getNombreAbreviado() {
+        return nombreAbreviado;
+    }
+    
+    public void setNombreAbreviado(String nombreAbreviado) {
+        this.nombreAbreviado = nombreAbreviado;
     }
     
     @Override
