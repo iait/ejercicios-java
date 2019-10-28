@@ -24,6 +24,9 @@ public class LocalidadEntity {
     @Column(name = "nombre", nullable = false)
     private String nombre;
     
+    @Column(name = "nombre_abreviado")
+    private String nombreAbreviado;
+    
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "provincia_id", referencedColumnName = "id")
     private ProvinciaEntity provincia;
@@ -44,6 +47,14 @@ public class LocalidadEntity {
     
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+    
+    public String getNombreAbreviado() {
+        return nombreAbreviado;
+    }
+    
+    public void setNombreAbreviado(String nombreAbreviado) {
+        this.nombreAbreviado = nombreAbreviado;
     }
     
     public ProvinciaEntity getProvincia() {
