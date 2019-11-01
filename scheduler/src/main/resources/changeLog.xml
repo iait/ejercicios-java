@@ -1,0 +1,52 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog 
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    
+    <changeSet author="ismael.ait (generated)" id="1572607492876-1">
+        <createSequence cycle="false" incrementBy="50" maxValue="9223372036854775807" minValue="0" sequenceName="localidades_sequence" startValue="1"/>
+    </changeSet>
+    
+    <changeSet author="ismael.ait (generated)" id="1572607492876-2">
+        <createSequence cycle="false" incrementBy="50" maxValue="9223372036854775807" minValue="0" sequenceName="provincias_sequence" startValue="1"/>
+    </changeSet>
+    
+    <changeSet author="ismael.ait (generated)" id="1572607492876-3">
+        <createTable tableName="localidades">
+            <column name="id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nombre" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provincia_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    
+    <changeSet author="ismael.ait (generated)" id="1572607492876-4">
+        <createTable tableName="provincias">
+            <column name="id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nombre" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    
+    <changeSet author="ismael.ait (generated)" id="1572607492876-5">
+        <addPrimaryKey columnNames="id" constraintName="PK_localidades" tableName="localidades"/>
+    </changeSet>
+    
+    <changeSet author="ismael.ait (generated)" id="1572607492876-6">
+        <addPrimaryKey columnNames="id" constraintName="PK_provincias" tableName="provincias"/>
+    </changeSet>
+    
+    <changeSet author="ismael.ait (generated)" id="1572607492876-7">
+        <addForeignKeyConstraint baseColumnNames="provincia_id" baseTableName="localidades" constraintName="FK_localidades_provincias" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="provincias"/>
+    </changeSet>
+</databaseChangeLog>
